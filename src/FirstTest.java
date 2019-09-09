@@ -38,6 +38,7 @@ public class FirstTest {
 
     @After
     public void tearDown() {
+        driver.rotate(ScreenOrientation.PORTRAIT);
         driver.quit();
     }
 
@@ -711,6 +712,21 @@ public class FirstTest {
 
     }
 
+
+    //III Complex scenarios. EX7* if testResetOrientation1 fails then testResetOrientation2 should be ok
+
+    @Test
+    public void testResetOrientation1(){
+        Assert.assertEquals(ScreenOrientation.PORTRAIT, driver.getOrientation());
+        driver.rotate(ScreenOrientation.LANDSCAPE);
+        Assert.assertTrue(false);
+    }
+
+    @Test
+    public void testResetOrientation2(){
+        Assert.assertEquals(ScreenOrientation.PORTRAIT, driver.getOrientation());
+        driver.rotate(ScreenOrientation.LANDSCAPE);
+    }
 
 
     private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds) {
