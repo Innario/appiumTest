@@ -670,7 +670,46 @@ public class FirstTest {
     }
 
 
+    //III Complex scenarios. EX6
 
+    @Test
+    public void checkArticleTitle() {
+        String searchWord = "Java";
+        String articleTitle = "Java (programming language)";
+        String articleDescription = "Object-oriented programming language";
+
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text,'Search Wikipedia')]"),
+                "Cannot find search 'Search Wikipedia' input",
+                5
+        );
+
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text,'Search…')]"),
+                searchWord,
+                "Cannot find search input",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='" + articleDescription + "']"),
+                "Cannot find 'Object-oriented programming language' topic searching by " + searchWord,
+                25
+        );
+
+        String title = waitForElementAndGetAttribute(
+                By.id("org.wikipedia:id/view_page_title_text"),
+                "text",
+                "Cannot find title of article",
+                15
+
+        );
+
+        // Throws NoSuchElementException if there is no title element
+        WebElement titleElement = driver.findElement(By.id("org.wikipedia:id/view_page_title_text"));
+        Assert.assertEquals(titleElement.getAttribute("text"), articleTitle);
+
+    }
 
 
 
