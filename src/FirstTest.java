@@ -706,10 +706,9 @@ public class FirstTest {
 
         );
 
-        // Throws NoSuchElementException if there is no title element
-        WebElement titleElement = driver.findElement(By.id("org.wikipedia:id/view_page_title_text"));
-        Assert.assertEquals(titleElement.getAttribute("text"), articleTitle);
 
+        WebElement titleElement = assertElementPresent(By.id("org.wikipedia:id/view_page_title_text"));
+        checkElementAttribute(titleElement, "text", articleTitle);
     }
 
 
@@ -728,6 +727,17 @@ public class FirstTest {
         driver.rotate(ScreenOrientation.LANDSCAPE);
     }
 
+
+    private void checkElementAttribute(WebElement element, String attribute, String expectedValue) {
+        String realValue = element.getAttribute(attribute);
+        Assert.assertEquals(realValue, expectedValue);
+    }
+
+    private WebElement assertElementPresent(By by) {
+        // Throws NoSuchElementException if there is no such an element
+        WebElement element = driver.findElement(by);
+        return element;
+    }
 
     private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
