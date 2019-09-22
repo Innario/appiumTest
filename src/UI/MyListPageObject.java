@@ -47,4 +47,14 @@ public class MyListPageObject extends MainPageObject{
         this.waitForArticleToDisappearByTitle(article_title);
     }
 
+    public String getFirstArticleTitle() {
+        String title = this.waitForElementAndGetAttribute(
+                By.id("org.wikipedia:id/view_page_title_text"),
+                "text",
+                "Cannot find title of article",
+                15
+        );
+        return title;
+    }
+
 }
