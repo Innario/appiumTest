@@ -1,10 +1,10 @@
 package tests;
 
 import Lib.CoreTestCase;
-import UI.ArticlePageObject;
-import UI.MyListPageObject;
-import UI.NavigationUI;
-import UI.SearchPageObject;
+import Lib.UI.ArticlePageObject;
+import Lib.UI.MyListPageObject;
+import Lib.UI.NavigationUI;
+import Lib.UI.SearchPageObject;
 import org.junit.Test;
 
 public class MyListsTests extends CoreTestCase {

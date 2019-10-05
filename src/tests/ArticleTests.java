@@ -1,8 +1,8 @@
 package tests;
 
 import Lib.CoreTestCase;
-import UI.ArticlePageObject;
-import UI.SearchPageObject;
+import Lib.UI.ArticlePageObject;
+import Lib.UI.SearchPageObject;
 import org.junit.Test;
 
 public class ArticleTests extends CoreTestCase {

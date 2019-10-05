@@ -2,6 +2,7 @@ package Lib;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.ios.IOSDriver;
 import junit.framework.TestCase;
 import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -10,9 +11,11 @@ import java.net.URL;
 
 public class CoreTestCase extends TestCase {
 
+    private static final String
+            PLATFORM_IOS = "ios",
+            PLATFORM_ANDROID = "android";
 
     protected AppiumDriver driver;
-
     private static String AppiumURL = "http://127.0.0.1:4723/wd/hub";
 
 
@@ -21,17 +24,9 @@ public class CoreTestCase extends TestCase {
 
         super.setUp();
 
-        DesiredCapabilities capabilities = new DesiredCapabilities();
+        DesiredCapabilities capabilities = this.getCapabilitiesByPlatformEnv();
 
-        capabilities.setCapability("platformName", "Android");
-        capabilities.setCapability("deviceName", "AndroidTestDevice");
-        capabilities.setCapability("platformVersion", "5.1");
-        capabilities.setCapability("automationName", "Appium");
-        capabilities.setCapability("appPackage", "org.wikipedia");
-        capabilities.setCapability("appActivity", ".main.MainActivity");
-        capabilities.setCapability("app", "C:\\Users\\inna\\Desktop\\automator\\JavaAppiumAutomation1\\apks\\org.wikipedia.apk");
-
-        driver = new AndroidDriver(new URL(AppiumURL), capabilities);
+        driver = getDriverByPlatformEnv(capabilities);
         driver.rotate(ScreenOrientation.PORTRAIT);
         this.rotateScreenPortrait();
     }
@@ -57,5 +52,45 @@ public class CoreTestCase extends TestCase {
     }
 
 
+    private DesiredCapabilities getCapabilitiesByPlatformEnv() throws Exception{
+        String platform = System.getenv("PLATFORM");
+        DesiredCapabilities capabilities = new DesiredCapabilities();
+
+        if(platform.equals(PLATFORM_ANDROID)){
+            capabilities.setCapability("platformName", "Android");
+            capabilities.setCapability("deviceName", "AndroidTestDevice");
+            capabilities.setCapability("platformVersion", "8.0");
+            capabilities.setCapability("automationName", "Appium");
+            capabilities.setCapability("appPackage", "org.wikipedia");
+            capabilities.setCapability("appActivity", ".main.MainActivity");
+            capabilities.setCapability("app", "/Users/innaVoevodina/AndroidStudioProjects/appiumTest/apks/org.wikipedia.apk");
+
+        } else if (platform.equals(PLATFORM_IOS)){
+            capabilities.setCapability("platformName", "iOS");
+            capabilities.setCapability("deviceName", "iPhone SE");
+            capabilities.setCapability("platformVersion", "12.0");
+            capabilities.setCapability("app", "/Users/innaVoevodina/AndroidStudioProjects/appiumTest/apks/Wikipedia.app");
+
+        }else{
+            throw new Exception("Cannot get run platform from env variable. Platform value " + platform);
+        }
+        return capabilities;
+    }
+
+    private AppiumDriver getDriverByPlatformEnv(DesiredCapabilities capabilities) throws Exception{
+
+        String platform = System.getenv("PLATFORM");
+
+        if(platform.equals(PLATFORM_ANDROID)){
+            return new AndroidDriver(new URL(AppiumURL), capabilities);
+
+        } else if (platform.equals(PLATFORM_IOS)){
+            return new IOSDriver(new URL(AppiumURL), capabilities);
+
+        }else{
+            throw new Exception("Cannot get run platform from env variable. Platform value " + platform);
+        }
+
+    }
 
 }

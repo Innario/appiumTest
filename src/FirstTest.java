@@ -1,5 +1,5 @@
 import Lib.CoreTestCase;
-import UI.*;
+import Lib.UI.*;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ScreenOrientation;
@@ -20,13 +20,13 @@ public class FirstTest extends CoreTestCase {
     @Test /*II.Ex2*/
     public void testSearchPlaceHolder() {
         MainPageObject.waitForElementAndClick(
-                By.id("org.wikipedia:id/search_container"),
+                "id:org.wikipedia:id/search_container",
                 "Cannot find search 'Search Wikipedia' input",
                 5
 
         );
         WebElement element = MainPageObject.waitForElementPresent(
-                By.id("org.wikipedia:id/search_src_text"),
+                "id:org.wikipedia:id/search_src_text",
                 "Cannot find search box",
                 5
         );
@@ -57,12 +57,12 @@ public class FirstTest extends CoreTestCase {
         String wordToSearch = "QA";
 
         MainPageObject.waitForElementAndClick(
-                By.id("org.wikipedia:id/search_container"),
+                "id:org.wikipedia:id/search_container",
                 "Cannot find search 'Search Wikipedia' input",
                 5
         );
         MainPageObject.waitForElementAndSendKeys(
-                By.id("org.wikipedia:id/search_src_text"),
+                "id:org.wikipedia:id/search_src_text",
                 wordToSearch,
                 "Cannot find search input",
                 5
