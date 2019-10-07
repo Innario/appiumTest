@@ -1,26 +1,29 @@
 package Lib.UI;
 
+import Lib.Platform;
+import Lib.UI.android.AndroidSearchPageObject;
+import Lib.UI.ios.iOSSearchPageObject;
 import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-public class ArticlePageObject extends MainPageObject {
+abstract public class ArticlePageObject extends MainPageObject {
 
     public ArticlePageObject(AppiumDriver driver) {
         super(driver);
 
     }
 
-    private static final String
-            TITLE = "id:org.wikipedia:id/view_page_title_text",
-            FOOTER = "xpath://*[@text='View page in browser']",
-            OPTIONS_BUTTON = "xpath://android.widget.ImageView[@content-desc='More options']",
-            OPTIONS_ADD_TO_MY_LIST_BUTTON = "xpath://*[@text='Add to reading list']",
-            ADD_TO_MY_LIST_OVERLAY = "id:org.wikipedia:id/onboarding_button",
-            MY_LIST_NAME_INPUT = "id:org.wikipedia:id/text_input",
-            MY_LIST_OK_BUTTON = "id:android:id/button1",
-            MY_LIST_ITEM = "xpath://*[@text='{LIST_NAME}']",
-            CLOSE_ARTICLE_BUTTON = "xpath://android.widget.ImageButton[@content-desc='Navigate up']";
+     protected static  String
+            TITLE,
+            FOOTER,
+            OPTIONS_BUTTON,
+            OPTIONS_ADD_TO_MY_LIST_BUTTON,
+            ADD_TO_MY_LIST_OVERLAY,
+            MY_LIST_NAME_INPUT,
+            MY_LIST_OK_BUTTON,
+            MY_LIST_ITEM,
+            CLOSE_ARTICLE_BUTTON;
 
     private static String getListXpathByName(String name_of_folder) {
         return MY_LIST_ITEM.replace("{LIST_NAME}", name_of_folder);
@@ -37,11 +40,22 @@ public class ArticlePageObject extends MainPageObject {
 
     public String getArticleTitle() {
         WebElement title_element = waitForTitleElement();
-        return title_element.getAttribute("text");
+        if (Platform.getInstance().isAndroid()) {
+            return title_element.getAttribute("text");
+        }else {
+            return title_element.getAttribute("name");
+        }
     }
 
     public void swipeToFooter() {
-        this.swipeUpToFindElement(FOOTER, "Cannot find the end of article", 20);
+
+        if (Platform.getInstance().isAndroid()) {
+            this.swipeUpToFindElement(FOOTER, "Cannot find the end of article", 40);
+        }else {
+            this.SwipeUpTillElementAppear(FOOTER, "Cannot find the end of article", 40);
+        }
+
+
     }
 
 
@@ -112,6 +126,11 @@ public class ArticlePageObject extends MainPageObject {
         );
     }
 
+
+    public void addArticlesToMySaved(){
+        this.waitForElementAndClick(OPTIONS_ADD_TO_MY_LIST_BUTTON, "Cannot find option to add article to reading list", 5);
+
+    }
 
     public void closeArticle() {
         this.waitForElementAndClick(

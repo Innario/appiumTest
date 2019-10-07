@@ -1,5 +1,7 @@
 import Lib.CoreTestCase;
 import Lib.UI.*;
+import Lib.UI.factories.ArticlePageObjectFactory;
+import Lib.UI.factories.SearchPageObjectFactory;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ScreenOrientation;
@@ -41,7 +43,7 @@ public class FirstTest extends CoreTestCase {
     @Test /*II.Ex3*/
     public void testFindSeveralArticles() {
 
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
 
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("QA");
@@ -93,12 +95,12 @@ public class FirstTest extends CoreTestCase {
         String articleTitle = "Java (programming language)";
         String articleDescription = "Object-oriented programming language";
         {
-            SearchPageObject SearchPageObject = new SearchPageObject(driver);
+            SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
             SearchPageObject.initSearchInput();
             SearchPageObject.typeSearchLine(searchWord);
             SearchPageObject.clickByArticleWithSubstring(articleDescription);
 
-            ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
+            ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
             ArticlePageObject.waitForTitleElement();
             ArticlePageObject.addArticleToMyList(nameOfList);
             ArticlePageObject.closeArticle();
@@ -107,12 +109,12 @@ public class FirstTest extends CoreTestCase {
         String articleTitle2 = "JavaScript";
         String articleDescription2 = "Programming language";
         {
-            SearchPageObject SearchPageObject = new SearchPageObject(driver);
+            SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
             SearchPageObject.initSearchInput();
             SearchPageObject.typeSearchLine(searchWord);
             SearchPageObject.clickByArticleWithSubstring(articleDescription2);
 
-            ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
+            ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
             ArticlePageObject.waitForTitleElement();
             ArticlePageObject.addArticleToMyExistingList(nameOfList);
             ArticlePageObject.closeArticle();
@@ -138,12 +140,12 @@ public class FirstTest extends CoreTestCase {
         String articleTitle = "Java (programming language)";
         String articleDescription = "Object-oriented programming language";
 
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine(searchWord);
         SearchPageObject.clickByArticleWithSubstring(articleDescription);
 
-        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
         assertEquals(ArticlePageObject.getTitleElementText(), articleTitle);
     }
 

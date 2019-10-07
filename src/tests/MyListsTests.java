@@ -5,31 +5,44 @@ import Lib.UI.ArticlePageObject;
 import Lib.UI.MyListPageObject;
 import Lib.UI.NavigationUI;
 import Lib.UI.SearchPageObject;
+import Lib.UI.factories.ArticlePageObjectFactory;
+import Lib.UI.factories.MyListPageObjectFactory;
+import Lib.UI.factories.NavigationUIFactory;
+import Lib.UI.factories.SearchPageObjectFactory;
 import org.junit.Test;
 
 public class MyListsTests extends CoreTestCase {
 
+    private static final String name_of_folder = "Learning programming";
+
+
     @Test
     public void testSaveFirstArticleToMyList(){
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("Java");
         SearchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
 
-        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
         ArticlePageObject.waitForTitleElement();
 
         String article_title = ArticlePageObject.getArticleTitle();
-        String name_of_folder = "Learning programming";
 
-        ArticlePageObject.addArticleToMyList(name_of_folder);
+        if (Platform.getInstance().isAndroid()) {
+            ArticlePageObject.addArticleToMyList(name_of_folder);
+        }else {
+            ArticlePageObject.addArticlesToMySaved();
+        }
         ArticlePageObject.closeArticle();
 
-        NavigationUI NavigationUI = new NavigationUI(driver);
+        NavigationUI NavigationUI = new NavigationUIFactory.get(driver);
         NavigationUI.clickMyLists();
 
-        MyListPageObject MyListPageObject = new MyListPageObject(driver);
-        MyListPageObject.openFolderByName(name_of_folder);
+        MyListPageObject MyListPageObject = new MyListPageObjectFactory.get(driver);
+
+        if (Platform.getInstance().isAndroid()) {
+            MyListPageObject.openFolderByName(name_of_folder);
+        }
         MyListPageObject.swipeByArticleToDelete(article_title);
     }
 
