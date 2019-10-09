@@ -9,11 +9,6 @@ import org.openqa.selenium.WebElement;
 
 abstract public class ArticlePageObject extends MainPageObject {
 
-    public ArticlePageObject(AppiumDriver driver) {
-        super(driver);
-
-    }
-
      protected static  String
             TITLE,
             FOOTER,
@@ -23,7 +18,13 @@ abstract public class ArticlePageObject extends MainPageObject {
             MY_LIST_NAME_INPUT,
             MY_LIST_OK_BUTTON,
             MY_LIST_ITEM,
+            CLOSE_AUTHORIZATION_BUTTON,
             CLOSE_ARTICLE_BUTTON;
+
+    public ArticlePageObject(AppiumDriver driver) {
+        super(driver);
+
+    }
 
     private static String getListXpathByName(String name_of_folder) {
         return MY_LIST_ITEM.replace("{LIST_NAME}", name_of_folder);
@@ -135,6 +136,14 @@ abstract public class ArticlePageObject extends MainPageObject {
     public void closeArticle() {
         this.waitForElementAndClick(
                 CLOSE_ARTICLE_BUTTON,
+                "Can not find element 'X'",
+                5
+        );
+    }
+
+    public void closePopUpAuthorization() {
+        this.waitForElementAndClick(
+                CLOSE_AUTHORIZATION_BUTTON,
                 "Can not find element 'X'",
                 5
         );

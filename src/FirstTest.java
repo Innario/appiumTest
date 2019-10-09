@@ -1,7 +1,10 @@
 import Lib.CoreTestCase;
 import Lib.UI.*;
 import Lib.UI.factories.ArticlePageObjectFactory;
+import Lib.UI.factories.MyListPageObjectFactory;
+import Lib.UI.factories.NavigationUIFactory;
 import Lib.UI.factories.SearchPageObjectFactory;
+import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ScreenOrientation;
@@ -99,11 +102,17 @@ public class FirstTest extends CoreTestCase {
             SearchPageObject.initSearchInput();
             SearchPageObject.typeSearchLine(searchWord);
             SearchPageObject.clickByArticleWithSubstring(articleDescription);
-
             ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
+
+
+            if (Platform.getInstance().isAndroid()) {
+                ArticlePageObject.addArticleToMyList(nameOfList);
+            } else if (Platform.getInstance().isIOS()) {
+                ArticlePageObject.addArticlesToMySaved();
+                ArticlePageObject.closePopUpAuthorization();
+                ArticlePageObject.closeArticle();
+            }
             ArticlePageObject.waitForTitleElement();
-            ArticlePageObject.addArticleToMyList(nameOfList);
-            ArticlePageObject.closeArticle();
         }
 
         String articleTitle2 = "JavaScript";
@@ -111,24 +120,34 @@ public class FirstTest extends CoreTestCase {
         {
             SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
             SearchPageObject.initSearchInput();
-            SearchPageObject.typeSearchLine(searchWord);
+            if (Platform.getInstance().isAndroid()) {
+                SearchPageObject.typeSearchLine(searchWord);
+            }
             SearchPageObject.clickByArticleWithSubstring(articleDescription2);
-
             ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
-            ArticlePageObject.waitForTitleElement();
-            ArticlePageObject.addArticleToMyExistingList(nameOfList);
-            ArticlePageObject.closeArticle();
+
+
+            if (Platform.getInstance().isAndroid()) {
+                ArticlePageObject.addArticleToMyList(nameOfList);
+            } else if (Platform.getInstance().isIOS()) {
+                ArticlePageObject.addArticlesToMySaved();
+                ArticlePageObject.closeArticle();
+            }
         }
 
-        NavigationUI NavigationUI = new NavigationUI(driver);
+        NavigationUI NavigationUI = NavigationUIFactory.get(driver);
         NavigationUI.clickMyLists();
 
-        MyListPageObject MyListPageObject = new MyListPageObject(driver);
-        MyListPageObject.openFolderByName(nameOfList);
+        MyListPageObject MyListPageObject = MyListPageObjectFactory.get(driver);
+        if (Platform.getInstance().isAndroid()) {
+            MyListPageObject.openFolderByName(nameOfList);
+        }
         MyListPageObject.swipeByArticleToDelete(articleTitle);
         MyListPageObject.waitForArticleToDisappearByTitle(articleTitle);
-        MyListPageObject.waitForArticleToAppearByTitle(articleTitle2);
-        assertEquals(MyListPageObject.getFirstArticleTitle(), articleTitle2);
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
+        SearchPageObject.clickByArticleWithSubstring(articleDescription2);
+        ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
+        Assert.assertEquals(ArticlePageObject.getArticleTitle(),articleTitle2);
     }
 
 

@@ -57,6 +57,16 @@ abstract public class MyListPageObject extends MainPageObject {
             return title;
         }
 
+    public void openSavedArticleByTittle(String article_tittle)
+    {
+        String article_xpath = getFirstArticleTitle();
+        this.waitForElementAndClick(
+                article_xpath,
+                "Cannot find and click saved article by tittle " + article_tittle,
+                15
+        );
+    }
+
     }
 
 

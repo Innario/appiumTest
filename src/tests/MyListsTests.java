@@ -35,10 +35,10 @@ public class MyListsTests extends CoreTestCase {
         }
         ArticlePageObject.closeArticle();
 
-        NavigationUI NavigationUI = new NavigationUIFactory.get(driver);
+        NavigationUI NavigationUI = NavigationUIFactory.get(driver);
         NavigationUI.clickMyLists();
 
-        MyListPageObject MyListPageObject = new MyListPageObjectFactory.get(driver);
+        MyListPageObject MyListPageObject = MyListPageObjectFactory.get(driver);
 
         if (Platform.getInstance().isAndroid()) {
             MyListPageObject.openFolderByName(name_of_folder);
